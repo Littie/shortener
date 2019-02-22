@@ -75,9 +75,12 @@ class LinkController extends Controller
      */
     private function createLink(string $url): Link
     {
+        /** @var string $code */
+        $code = \ShortLinkGenerator::generate();
+
         return Link::create([
             'url'  => $url,
-            'code' => \ShortLinkGenerator::generate(),
+            'code' => $code,
         ]);
     }
 }
