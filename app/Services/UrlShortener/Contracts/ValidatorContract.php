@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Services\UrlShortener\Contracts;
 
 /**
- * Class ValidatorContract
+ * Class ValidatorContract.
  * @package App\Services\UrlShortener\Contracts
  */
 interface ValidatorContract
