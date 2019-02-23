@@ -19,6 +19,13 @@ class Generator implements GeneratorContract
      */
     const SHORT_LINK_LENGTH = 6;
 
+    private $validator;
+
+    public function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
+    }
+
     /**
      * Set of characters for generation short link.
      *
@@ -33,8 +40,11 @@ class Generator implements GeneratorContract
      */
     public function generate(): string
     {
-        $characters = str_repeat($this->characters, self::SHORT_LINK_LENGTH);
+        do {
+            $characters = str_repeat($this->characters, self::SHORT_LINK_LENGTH);
+            $code = substr(str_shuffle($characters), 0, self::SHORT_LINK_LENGTH);
+        } while (!$this->validator->validate($code));
 
-        return substr(str_shuffle($characters), 0, self::SHORT_LINK_LENGTH);
+        return $code;
     }
 }

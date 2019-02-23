@@ -39,14 +39,10 @@ class LinkController extends Controller
     public function store(UrlRequest $request): RedirectResponse
     {
         $url = $request->get('url');
-        $link = Link::where('url', $request->get('url'))->first();
+        $link = Link::where('url', $url)->first();
 
         if (null === $link) {
-            try {
-                $link = $this->createLink($url);
-            } catch (QueryException $e) {
-                return back()->withErrors(trans('app.store_error'));
-            }
+            $link = $this->createLink($url);
         }
 
         return back()->with(['code' => $link->getAttribute('code')]);

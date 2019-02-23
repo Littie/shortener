@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Services\UrlShortener;
 
 use App\Services\UrlShortener\Contracts\GeneratorContract;
+use App\Services\UrlShortener\Contracts\ValidatorContract;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -20,7 +21,16 @@ class UrlShortenerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(GeneratorContract::class, Generator::class);
+        /** Bind validator for generator */
+        $this->app->bind(ValidatorContract::class, Validator::class);
+        $this->app->alias(ValidatorContract::class, 'generator-validator');
+
+        /** Bind generator with validator */
+        $this->app->bind(GeneratorContract::class, function ($app) {
+            $validator = $app->make('generator-validator');
+
+            return new Generator($validator);
+        });
         $this->app->alias(GeneratorContract::class, 'generator');
     }
 }
